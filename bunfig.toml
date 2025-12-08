@@ -1,0 +1,30 @@
+# Bun configuration file
+# https://bun.sh/docs/runtime/bunfig
+# Equivalent to Jest configuration for consistent testing setup
+
+[test]
+# Test file patterns (equivalent to Jest's testMatch)
+# Matches all .test.ts files in the test directory
+
+# Coverage settings (equivalent to Jest's coverage config)
+coverage = false  # Disabled by default, use --coverage flag to enable
+coverageDir = "./coverage"  # equivalent to coverageDirectory
+coverageThreshold = 80      # 80% coverage threshold
+
+# Coverage collection patterns (equivalent to collectCoverageFrom)
+# Note: Bun collects coverage from tested files by default
+# To match Jest behavior, ensure test files import from test/**/*.ts
+
+# Test timeout (in milliseconds)
+timeout = 5000
+
+# Bail after first test failure
+bail = false
+
+# Module resolution (equivalent to Jest's modulePaths and moduleDirectories)
+# Bun automatically resolves from node_modules and supports path mapping via tsconfig.json
+
+# Test environment is always 'node' in Bun (equivalent to Jest's testEnvironment: 'node')
+
+# Supported file extensions (equivalent to Jest's moduleFileExtensions)
+# Bun natively supports: .ts, .tsx, .js, .jsx, .mjs, .cjs

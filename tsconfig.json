@@ -1,0 +1,90 @@
+{
+	"compilerOptions": {
+		/* Language and Environment */
+		"target": "ESNext",
+		"lib": ["ESNext"],
+		"jsx": "react-jsx",
+		"experimentalDecorators": true,
+		"emitDecoratorMetadata": true,
+		"useDefineForClassFields": true,
+
+		/* Modules */
+		"module": "Preserve",
+		"moduleResolution": "bundler",
+		"moduleDetection": "force",
+		"allowImportingTsExtensions": true,
+		"resolveJsonModule": true,
+		"allowJs": true,
+		"checkJs": false,
+
+		/* Emit */
+		"declaration": true,
+		"declarationMap": true,
+		"sourceMap": true,
+		"removeComments": true,
+		"importHelpers": true,
+		"downlevelIteration": true,
+		"newLine": "lf",
+		"stripInternal": true,
+		"noEmit": true,
+		"noEmitOnError": true,
+
+		/* Interop Constraints */
+		"isolatedModules": true,
+		"verbatimModuleSyntax": true,
+		"allowSyntheticDefaultImports": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
+
+		/* Type Checking - Strict Mode */
+		"strict": true,
+		"noImplicitAny": true,
+		"strictNullChecks": true,
+		"strictFunctionTypes": true,
+		"strictBindCallApply": true,
+		"strictPropertyInitialization": true,
+		"noImplicitThis": true,
+		"useUnknownInCatchVariables": true,
+		"alwaysStrict": true,
+
+		/* Type Checking - Additional Checks */
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"exactOptionalPropertyTypes": true,
+		"noImplicitReturns": true,
+		"noFallthroughCasesInSwitch": true,
+		"noUncheckedIndexedAccess": true,
+		"noImplicitOverride": true,
+		"noPropertyAccessFromIndexSignature": true,
+		"allowUnusedLabels": false,
+		"allowUnreachableCode": false,
+
+		/* Completeness */
+		"skipLibCheck": true,
+
+		/* Output */
+		"rootDir": "./",
+		"outDir": "./dist",
+		"incremental": true,
+		"tsBuildInfoFile": "./dist/.tsbuildinfo",
+
+		/* Path Mapping */
+		"baseUrl": "./",
+		"paths": {
+			"@/*": ["./src/*"],
+			"@test/*": ["./test/*"]
+		},
+
+		/* Advanced */
+		"preserveConstEnums": true,
+		"preserveSymlinks": false,
+		"assumeChangesOnlyAffectDirectDependencies": true
+	},
+
+	/* Include/Exclude */
+	"include": ["config/**/*", "src/**/*", "test/**/*", "scripts/**/*"],
+	"exclude": ["node_modules", "dist", "coverage", "**/*.spec.ts", "**/*.test.ts"],
+
+	/* TypeScript Project References (for monorepos) */
+	"references": []
+}
