@@ -1,49 +1,57 @@
 import config from 'config';
-import type { Request, Response } from 'express';
+import type { NextFunction, Request, Response } from 'express';
+import { logger } from '@/config';
 /**
- * @param {Error} error
+ * @param {Error & { code?: number }} error
  * @param {Request} req
  * @param {Response} res
  * @return void
  */
 
-export const errorHandler = (error: Error & { statusCode?: number }, req: Request, res: Response) => {
-	let statusCode = error.statusCode || 500;
+export const errorHandler = (
+	error: Error & { code?: number },
+	req: Request,
+	res: Response,
+	_next: NextFunction,
+) => {
+	let code = error.code || 500;
 	let message = error.message || 'Something went wrong';
 	let errorDetails = null;
 
-	// TODO: add logger here
-	// Enhanced error logging for production debugging
-	// const _errorLog = {
-	// 	timestamp: new Date().toISOString(),
-	// 	method: req.method,
-	// 	url: req.originalUrl,
-	// 	ip: req.ip,
-	// 	userAgent: req.get('User-Agent'),
-	// 	error: {
-	// 		name: error.name,
-	// 		message: error.message,
-	// 		stack: config.get('NODE_ENV') === 'development' ? error.stack : undefined,
-	// 	},
-	// };
+	const errorLog = {
+		timestamp: new Date().toISOString(),
+		method: req.method,
+		url: req.originalUrl,
+		ip: req.ip,
+		userAgent: req.get('User-Agent'),
+		path: req.path,
+		error: {
+			name: error.name,
+			message: error.message,
+			stack:
+				config.get('server.env') === 'development' ? error.stack : undefined,
+		},
+	};
+
+	logger.error('Error occurred in ', req.originalUrl, errorLog);
 
 	if (error instanceof Error) {
 		errorDetails = error;
 		message = error.message;
-		statusCode = error.statusCode || 500;
+		code = error.code || 500;
 	}
 
 	// Prevent sensitive information leakage
 	const response = {
-		statusCode,
+		code,
 		success: false,
 		message,
 		...(errorDetails && { errorDetails }),
-		...(config.get('NODE_ENV') === 'development' && {
+		...(config.get('server.env') === 'development' && {
 			timestamp: new Date().toISOString(),
-			path: req.originalUrl,
+			url: req.originalUrl,
 		}),
 	};
 
-	res.status(statusCode).json(response);
+	res.status(code).json(response);
 };

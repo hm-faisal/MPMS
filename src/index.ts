@@ -2,6 +2,7 @@ import { createServer, type Server as HTTPServer } from 'node:http';
 import config from 'config';
 import app from './app/app';
 import { logger } from './config';
+import { connectDb } from './db';
 
 let httpServer: HTTPServer | null = null;
 let isShuttingDown = false;
@@ -13,8 +14,11 @@ const startServer = async (): Promise<void> => {
 	const port = config.get<number>('server.port');
 	const environment = config.get<string>('server.env');
 
+	await connectDb(config.get<string>('db.url'));
 	httpServer.listen(port, () => {
-		logger.info(`🚀 Server started successfully on port ${port} in ${environment} environment`);
+		logger.info(
+			`🚀 Server started successfully on port ${port} in ${environment} environment`,
+		);
 		logger.info(`🔗 API URL: http://localhost:${port}`);
 	});
 

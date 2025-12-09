@@ -83,7 +83,13 @@
 
 	/* Include/Exclude */
 	"include": ["config/**/*", "src/**/*", "test/**/*", "scripts/**/*"],
-	"exclude": ["node_modules", "dist", "coverage", "**/*.spec.ts", "**/*.test.ts"],
+	"exclude": [
+		"node_modules",
+		"dist",
+		"coverage",
+		"**/*.spec.ts",
+		"**/*.test.ts"
+	],
 
 	/* TypeScript Project References (for monorepos) */
 	"references": []

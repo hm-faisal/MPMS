@@ -13,6 +13,28 @@ export default {
 	},
 
 	/**
+	 * Database
+	 */
+	db: {
+		url: process.env['DATABASE_URL'],
+	},
+
+	/**
+	 * Bcrypt
+	 */
+	bcrypt: {
+		saltRounds: Number(process.env['BCRYPT_SALT_ROUNDS']),
+	},
+
+	/**
+	 * JWT
+	 */
+	jwt: {
+		accessTokenSecret: process.env['JWT_ACCESS_TOKEN_SECRET'],
+		accessTokenExpiresIn: Number(process.env['JWT_ACCESS_TOKEN_EXPIRES_IN']),
+	},
+
+	/**
 	 * Cors origins
 	 */
 
@@ -41,8 +63,8 @@ export default {
 	 */
 
 	rateLimit: {
-		windowMs: process.env['RATE_LIMIT_WINDOW_MS'],
-		max: process.env['RATE_LIMIT_MAX'],
+		windowMs: Number(process.env['RATE_LIMIT_WINDOW_MS']),
+		max: Number(process.env['RATE_LIMIT_MAX']),
 	},
 
 	/**
