@@ -16,7 +16,9 @@ const startServer = async (): Promise<void> => {
 
 	await connectDb(config.get<string>('db.url'));
 	httpServer.listen(port, () => {
-		logger.info(`🚀 Server started successfully on port ${port} in ${environment} environment`);
+		logger.info(
+			`🚀 Server started successfully on port ${port} in ${environment} environment`,
+		);
 		logger.info(`🔗 API URL: http://localhost:${port}`);
 	});
 

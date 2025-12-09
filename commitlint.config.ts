@@ -127,7 +127,8 @@ const configuration: UserConfig = {
 						emoji: '💎',
 					},
 					refactor: {
-						description: 'A code change that neither fixes a bug nor adds a feature',
+						description:
+							'A code change that neither fixes a bug nor adds a feature',
 						title: 'Code Refactoring',
 						emoji: '📦',
 					},
@@ -142,7 +143,8 @@ const configuration: UserConfig = {
 						emoji: '🚨',
 					},
 					build: {
-						description: 'Changes that affect the build system or external dependencies',
+						description:
+							'Changes that affect the build system or external dependencies',
 						title: 'Builds',
 						emoji: '🛠',
 					},
@@ -164,10 +166,12 @@ const configuration: UserConfig = {
 				},
 			},
 			scope: {
-				description: 'What is the scope of this change (e.g. component or file name)',
+				description:
+					'What is the scope of this change (e.g. component or file name)',
 			},
 			subject: {
-				description: 'Write a short, imperative tense description of the change',
+				description:
+					'Write a short, imperative tense description of the change',
 			},
 			body: {
 				description: 'Provide a longer description of the change',
@@ -176,7 +180,8 @@ const configuration: UserConfig = {
 				description: 'Are there any breaking changes?',
 			},
 			breakingBody: {
-				description: 'A BREAKING CHANGE commit requires a body. Please enter a longer description of the commit itself',
+				description:
+					'A BREAKING CHANGE commit requires a body. Please enter a longer description of the commit itself',
 			},
 			breaking: {
 				description: 'Describe the breaking changes',

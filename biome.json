@@ -12,7 +12,7 @@
 	"formatter": {
 		"enabled": true,
 		"indentStyle": "tab",
-		"lineWidth": 120
+		"lineWidth": 80
 	},
 	"linter": {
 		"enabled": true,
@@ -52,7 +52,13 @@
 	},
 	"overrides": [
 		{
-			"includes": ["node_modules/**", "dist/**", "coverage/**", "**/*.d.ts", "**/*.js"],
+			"includes": [
+				"node_modules/**",
+				"dist/**",
+				"coverage/**",
+				"**/*.d.ts",
+				"**/*.js"
+			],
 			"linter": {
 				"enabled": false
 			},
