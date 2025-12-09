@@ -4,7 +4,12 @@ import express, { type Application } from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import swaggerUI from 'swagger-ui-express';
-import { corsConfig, rateLimitConfig, securityConfig, swaggerDocs } from '@/config';
+import {
+	corsConfig,
+	rateLimitConfig,
+	securityConfig,
+	swaggerDocs,
+} from '@/config';
 import { errorHandler } from '@/errors';
 import { applicationRoutes } from '@/routes';
 
@@ -26,7 +31,11 @@ app.use(rateLimit(rateLimitConfig));
  */
 
 if (config.get<boolean>('swagger.enabled')) {
-	app.use(`/${config.get<string>('swagger.path')}`, swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+	app.use(
+		`/${config.get<string>('swagger.path')}`,
+		swaggerUI.serve,
+		swaggerUI.setup(swaggerDocs),
+	);
 }
 
 /**
