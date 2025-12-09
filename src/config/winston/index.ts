@@ -5,7 +5,11 @@
 
 import winston from 'winston';
 import { exceptionHandlers, rejectionHandlers } from './handlers';
-import { consoleTransport, errorFileTransport, infoFileTransport } from './transports';
+import {
+	consoleTransport,
+	errorFileTransport,
+	infoFileTransport,
+} from './transports';
 import { getEnvironment, getLogLevel } from './utils';
 
 const environment = getEnvironment();
@@ -16,7 +20,7 @@ const logLevel = getLogLevel();
  */
 const logger = winston.createLogger({
 	level: logLevel,
-	defaultMeta: { service: 'typescript-starter', environment },
+	defaultMeta: { service: 'MPMS-server', environment },
 	transports: [consoleTransport, infoFileTransport, errorFileTransport],
 	// Handle exceptions and rejections
 	exceptionHandlers,
