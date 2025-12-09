@@ -1,9 +1,14 @@
-import type { Router } from 'express';
-import express from 'express';
+import { Router } from 'express';
+import { authRoutes } from '@/modules/auth/auth.routes';
 
-const router = express.Router();
+const router = Router();
 
-const routers: { path: string; router: Router }[] = [];
+const routers: { path: string; router: Router }[] = [
+	{
+		router: authRoutes,
+		path: '/auth',
+	},
+];
 
 routers.forEach((route) => {
 	router.use(route.path, route.router);
