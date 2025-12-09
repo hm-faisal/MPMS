@@ -1,4 +1,5 @@
 import type { NextFunction, Request, RequestHandler, Response } from 'express';
+import { logger } from '@/config';
 
 /**
  * Wrapper to catch async errors with timeout
@@ -20,7 +21,7 @@ export const catchAsync = (fn: RequestHandler, timeoutMs: number = 30000) => {
 			await Promise.race([Promise.resolve(fn(req, res, next)), timeoutPromise]);
 		} catch (error) {
 			// Enhanced error logging
-			console.error('Async request error:', {
+			logger.error('Async request error:', {
 				url: req.originalUrl,
 				method: req.method,
 				ip: req.ip,
@@ -39,7 +40,10 @@ export const catchAsync = (fn: RequestHandler, timeoutMs: number = 30000) => {
  * @param timeoutMs number
  * @returns void
  */
-export const catchAsyncWithTimeout = (fn: RequestHandler, timeoutMs: number) => {
+export const catchAsyncWithTimeout = (
+	fn: RequestHandler,
+	timeoutMs: number,
+) => {
 	return catchAsync(fn, timeoutMs);
 };
 
