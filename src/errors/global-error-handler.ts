@@ -1,7 +1,8 @@
 import config from 'config';
 import type { Request, Response } from 'express';
+import { logger } from '@/config';
 /**
- * @param {Error} error
+ * @param {Error & { statusCode?: number }} error
  * @param {Request} req
  * @param {Response} res
  * @return void
@@ -12,20 +13,21 @@ export const errorHandler = (error: Error & { statusCode?: number }, req: Reques
 	let message = error.message || 'Something went wrong';
 	let errorDetails = null;
 
-	// TODO: add logger here
-	// Enhanced error logging for production debugging
-	// const _errorLog = {
-	// 	timestamp: new Date().toISOString(),
-	// 	method: req.method,
-	// 	url: req.originalUrl,
-	// 	ip: req.ip,
-	// 	userAgent: req.get('User-Agent'),
-	// 	error: {
-	// 		name: error.name,
-	// 		message: error.message,
-	// 		stack: config.get('NODE_ENV') === 'development' ? error.stack : undefined,
-	// 	},
-	// };
+	const errorLog = {
+		timestamp: new Date().toISOString(),
+		method: req.method,
+		url: req.originalUrl,
+		ip: req.ip,
+		userAgent: req.get('User-Agent'),
+		path: req.path,
+		error: {
+			name: error.name,
+			message: error.message,
+			stack: config.get('NODE_ENV') === 'development' ? error.stack : undefined,
+		},
+	};
+
+	logger.error('Error occurred in ', req.originalUrl, errorLog);
 
 	if (error instanceof Error) {
 		errorDetails = error;

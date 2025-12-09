@@ -1,7 +1,10 @@
+import config from 'config';
 import cors from 'cors';
 import express, { type Application } from 'express';
+import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
-import { corsConfig, securityConfig } from '@/config';
+import swaggerUI from 'swagger-ui-express';
+import { corsConfig, rateLimitConfig, securityConfig, swaggerDocs } from '@/config';
 import { errorHandler } from '@/errors';
 import { applicationRoutes } from '@/routes';
 
@@ -16,13 +19,25 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cors(corsConfig));
 app.use(helmet(securityConfig));
+app.use(rateLimit(rateLimitConfig));
+
+/**
+ * Swagger API docs
+ */
+
+if (config.get<boolean>('swagger.enabled')) {
+	app.use(`/${config.get<string>('swagger.path')}`, swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+}
 
 /**
  * Routes
  * @requires app
  */
 
-app.use('/api', applicationRoutes);
+app.use('/health', (_req, res) => {
+	res.status(200).json({ status: 'OK', timestamp: new Date().toISOString() });
+});
+app.use('/api/v1', applicationRoutes);
 
 /**
  * Error handlers

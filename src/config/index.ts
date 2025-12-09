@@ -3,8 +3,8 @@
  * Central export for all application configurations
  */
 
-export * from './cors.config.js';
-export * from './rate-limit.config.js';
-export * from './security.config.js';
-export * from './swagger.config.js';
+export * from './cors.config';
+export * from './rate-limit.config';
+export * from './security.config';
+export * from './swagger.config';
 export { default as logger } from './winston';

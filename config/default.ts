@@ -13,6 +13,13 @@ export default {
 	},
 
 	/**
+	 * Database
+	 */
+	db: {
+		url: process.env['DATABASE_URL'],
+	},
+
+	/**
 	 * Cors origins
 	 */
 
@@ -41,8 +48,8 @@ export default {
 	 */
 
 	rateLimit: {
-		windowMs: process.env['RATE_LIMIT_WINDOW_MS'],
-		max: process.env['RATE_LIMIT_MAX'],
+		windowMs: Number(process.env['RATE_LIMIT_WINDOW_MS']),
+		max: Number(process.env['RATE_LIMIT_MAX']),
 	},
 
 	/**
