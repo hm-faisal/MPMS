@@ -20,6 +20,21 @@ export default {
 	},
 
 	/**
+	 * Bcrypt
+	 */
+	bcrypt: {
+		saltRounds: Number(process.env['BCRYPT_SALT_ROUNDS']),
+	},
+
+	/**
+	 * JWT
+	 */
+	jwt: {
+		accessTokenSecret: process.env['JWT_ACCESS_TOKEN_SECRET'],
+		accessTokenExpiresIn: Number(process.env['JWT_ACCESS_TOKEN_EXPIRES_IN']),
+	},
+
+	/**
 	 * Cors origins
 	 */
 
