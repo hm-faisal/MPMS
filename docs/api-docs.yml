@@ -178,6 +178,10 @@ paths:
                       dashboard:
                         type: string
                         example: "/api/dashboard/"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
         "500":
           $ref: "#/components/responses/500"
 
@@ -573,7 +577,10 @@ paths:
                     properties:
                       data:
                         $ref: "#/components/schemas/User"
-
+        "401":
+          $ref: "#/components/responses/401"
+        "500":
+          $ref: "#/components/responses/500"
     patch:
       tags:
         - Users
@@ -600,7 +607,37 @@ paths:
       responses:
         "200":
           description: Profile updated successfully
-
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 201
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "User created successfully"
+                  data:
+                    $ref: "#/components/schemas/User"
+                  links:
+                    type: object
+                    properties:
+                      self:
+                        type: string
+                        example: "/api/users/"
+                      dashboard:
+                        type: string
+                        example: "/api/dashboard/"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "500":
+          $ref: "#/components/responses/500"
   /users/change-password:
     post:
       tags:
@@ -631,7 +668,16 @@ paths:
       responses:
         "200":
           description: Password changed successfully
-
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Success"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "500":
+          $ref: "#/components/responses/500"
   # ==================== Project Team Management ====================
   /projects/{projectId}/members:
     get:
@@ -1319,8 +1365,8 @@ paths:
                     $ref: "#/components/schemas/Pagination"
         "401":
           $ref: "#/components/responses/401"
-        "403":
-          $ref: "#/components/responses/403"
+        "500":
+          $ref: "#/components/responses/500"
 
   /users/{id}:
     get:
@@ -1348,7 +1394,9 @@ paths:
                       data:
                         $ref: "#/components/schemas/User"
         "404":
-          description: User not found
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
 
   # ==================== Projects ====================
   /projects:
