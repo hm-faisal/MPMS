@@ -1,4 +1,5 @@
 import config from 'config';
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { type Application } from 'express';
 import rateLimit from 'express-rate-limit';
@@ -21,6 +22,7 @@ const app: Application = express();
  */
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cors(corsConfig));
 app.use(helmet(securityConfig));

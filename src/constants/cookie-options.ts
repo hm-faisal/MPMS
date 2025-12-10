@@ -5,5 +5,5 @@ export const cookieOptions: CookieOptions = {
 	httpOnly: true,
 	secure: config.get('server.env') === 'production',
 	sameSite: 'lax',
-	maxAge: config.get('jwt.accessTokenExpiresIn'),
+	maxAge: config.get<number>('jwt.accessTokenExpiresIn') * 1000,
 };
