@@ -28,6 +28,7 @@
 		"@types/bcrypt": "^6.0.0",
 		"@types/bun": "latest",
 		"@types/config": "^3.3.5",
+		"@types/cookie-parser": "^1.4.10",
 		"@types/cors": "^2.8.19",
 		"@types/express": "^5.0.6",
 		"@types/jsonwebtoken": "^9.0.10",
@@ -45,6 +46,7 @@
 	"dependencies": {
 		"bcrypt": "^6.0.0",
 		"config": "^4.1.1",
+		"cookie-parser": "^1.4.7",
 		"cors": "^2.8.5",
 		"dotenv": "^17.2.3",
 		"express": "^5.2.1",
