@@ -1,5 +1,5 @@
 import { BadRequestError, UnauthorizedError } from '@/errors';
-import type { IUser } from '@/types';
+import type { UserType } from '@/models/User';
 import { catchAsync } from '@/utils/catch-async';
 import type { AccessTPayload } from '@/utils/jwt-helper';
 import { sendResponse } from '@/utils/send-response';
@@ -59,7 +59,7 @@ const updateUser = catchAsync(async (req, res) => {
 	if (!userId) {
 		throw new UnauthorizedError();
 	}
-	const user = await updateUserProfile(userId, parsedData as Partial<IUser>);
+	const user = await updateUserProfile(userId, parsedData as Partial<UserType>);
 
 	sendResponse(res, {
 		code: 200,
