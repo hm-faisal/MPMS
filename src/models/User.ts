@@ -1,4 +1,4 @@
-import { model, Schema } from 'mongoose';
+import { type InferSchemaType, model, Schema } from 'mongoose';
 import { UserRole } from '@/constants';
 
 const userSchema = new Schema(
@@ -41,4 +41,6 @@ const userSchema = new Schema(
 	},
 );
 
-export const User = model('User', userSchema);
+export type UserType = InferSchemaType<typeof userSchema>;
+
+export const User = model<UserType>('User', userSchema);
