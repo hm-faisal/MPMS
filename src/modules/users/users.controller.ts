@@ -10,7 +10,7 @@ import {
 	getUserProfile,
 	updatePassword,
 	updateUserProfile,
-} from './user.service';
+} from './users.service';
 
 const getProfile = catchAsync(async (req, res) => {
 	const { userId } = req.user as AccessTPayload;

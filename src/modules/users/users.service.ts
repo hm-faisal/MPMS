@@ -12,7 +12,7 @@ import type { ChangePasswordSchema } from './schemas/change-password.schema';
  * @param user User data
  * @returns New user Promise
  */
-export const createUser = (user: UserType) => {
+export const createUser = (user: Omit<UserType, 'createdAt' | 'updatedAt'>) => {
 	const newUser = new User(user);
 	return newUser.save();
 };
