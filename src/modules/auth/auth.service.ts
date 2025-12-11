@@ -2,7 +2,7 @@ import { UserRole } from '@/constants';
 import { BadRequestError, ConflictError } from '@/errors';
 import { compareService, hashService } from '@/utils/bcrypt';
 import { signJwtToken } from '@/utils/jwt-helper';
-import { createUser, findUserByEmail } from '../user/user.service';
+import { createUser, findUserByEmail } from '../users/users.service';
 import type { LoginSchema } from './schemas/login.schema';
 import type { RegisterSchema } from './schemas/register.schema';
 

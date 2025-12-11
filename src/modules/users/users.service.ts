@@ -3,8 +3,7 @@ import {
 	NotFoundError,
 	UnauthorizedError,
 } from '@/errors';
-import { User } from '@/models/User';
-import type { IUser } from '@/types';
+import { User, type UserType } from '@/models/User';
 import { compareService, hashService } from '@/utils/bcrypt';
 import type { ChangePasswordSchema } from './schemas/change-password.schema';
 
@@ -13,7 +12,7 @@ import type { ChangePasswordSchema } from './schemas/change-password.schema';
  * @param user User data
  * @returns New user Promise
  */
-export const createUser = (user: IUser) => {
+export const createUser = (user: Omit<UserType, 'createdAt' | 'updatedAt'>) => {
 	const newUser = new User(user);
 	return newUser.save();
 };
@@ -59,8 +58,9 @@ export const getUserProfile = async (id: string) => {
  * @returns Users Promise
  */
 // TODO: Add pagination
-export const getAllUsers = () => {
-	return User.find().select('-password');
+export const getAllUsers = async () => {
+	const users = await User.find();
+	return users;
 };
 
 /**
@@ -69,7 +69,10 @@ export const getAllUsers = () => {
  * @param user User data
  * @returns User profile Promise
  */
-export const updateUserProfile = async (id: string, user: Partial<IUser>) => {
+export const updateUserProfile = async (
+	id: string,
+	user: Partial<UserType>,
+) => {
 	const isExist = await User.findById(id);
 	if (!isExist) {
 		throw new NotFoundError('User not found');
@@ -102,7 +105,6 @@ export const updatePassword = async (
 	const { oldPassword, newPassword } = payload;
 
 	const isMatched = await compareService(oldPassword, isExist.password);
-
 	if (!isMatched) {
 		throw new UnauthorizedError('Invalid old password');
 	}

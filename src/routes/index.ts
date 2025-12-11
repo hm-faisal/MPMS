@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { authRoutes } from '@/modules/auth/auth.routes';
-import { userRoutes } from '@/modules/user/user.routes';
+import { projectsRoutes } from '@/modules/projects/projects.routes';
+import { userRoutes } from '@/modules/users/users.routes';
 
 const router = Router();
 
@@ -12,6 +13,10 @@ const routers: { path: string; router: Router }[] = [
 	{
 		router: userRoutes,
 		path: '/users',
+	},
+	{
+		router: projectsRoutes,
+		path: '/projects',
 	},
 ];
 

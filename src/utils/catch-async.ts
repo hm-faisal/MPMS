@@ -3,9 +3,9 @@ import { logger } from '@/config';
 
 /**
  * Wrapper to catch async errors with timeout
- * @param fn RequestHandler
- * @param timeoutMs number
- * @returns void
+ * @param {RequestHandler} fn - Express request handler
+ * @param {number} timeoutMs - Timeout in milliseconds (default: 30000)
+ * @returns {RequestHandler} Express middleware function
  */
 export const catchAsync = (fn: RequestHandler, timeoutMs: number = 30000) => {
 	return async (req: Request, res: Response, next: NextFunction) => {
@@ -29,6 +29,8 @@ export const catchAsync = (fn: RequestHandler, timeoutMs: number = 30000) => {
 				stack: error instanceof Error ? error.stack : undefined,
 			});
 
+			// Pass ALL errors to the global error handler without modification
+			// The global error handler will determine the proper status code and response
 			next(error);
 		}
 	};
@@ -36,9 +38,9 @@ export const catchAsync = (fn: RequestHandler, timeoutMs: number = 30000) => {
 
 /**
  * Wrapper to catch async errors with timeout
- * @param fn RequestHandler
- * @param timeoutMs number
- * @returns void
+ * @param {RequestHandler} fn - Express request handler
+ * @param {number} timeoutMs - Timeout in milliseconds
+ * @returns {RequestHandler} Express middleware function
  */
 export const catchAsyncWithTimeout = (
 	fn: RequestHandler,
@@ -49,8 +51,8 @@ export const catchAsyncWithTimeout = (
 
 /**
  * Wrapper to catch async errors with timeout for database operations
- * @param fn RequestHandler
- * @returns void
+ * @param {RequestHandler} fn - Express request handler
+ * @returns {RequestHandler} Express middleware function
  */
 export const catchAsyncDB = (fn: RequestHandler) => {
 	return catchAsync(fn, 10000); // 10 second timeout for DB operations
@@ -58,8 +60,8 @@ export const catchAsyncDB = (fn: RequestHandler) => {
 
 /**
  * Wrapper to catch async errors with timeout for file upload operations
- * @param fn RequestHandler
- * @returns void
+ * @param {RequestHandler} fn - Express request handler
+ * @returns {RequestHandler} Express middleware function
  */
 export const catchAsyncUpload = (fn: RequestHandler) => {
 	return catchAsync(fn, 60000); // 60 second timeout for uploads
@@ -67,8 +69,8 @@ export const catchAsyncUpload = (fn: RequestHandler) => {
 
 /**
  * Wrapper to catch async errors with timeout for authentication operations
- * @param fn RequestHandler
- * @returns void
+ * @param {RequestHandler} fn - Express request handler
+ * @returns {RequestHandler} Express middleware function
  */
 export const catchAsyncAuth = (fn: RequestHandler) => {
 	return catchAsync(fn, 5000); // 5 second timeout for auth operations
