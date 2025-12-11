@@ -50,6 +50,12 @@ const projectSchema = new Schema(
 			required: false,
 			default: [],
 		},
+		sprints: {
+			type: [Schema.ObjectId],
+			ref: 'Sprint',
+			required: false,
+			default: [],
+		},
 	},
 	{ timestamps: true },
 );

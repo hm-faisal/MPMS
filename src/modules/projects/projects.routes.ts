@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { isAuthenticated } from '@/middleware/authenticate.middleware';
 import { validateRequest } from '@/middleware/validate-request.middleware';
+import { createSprintSchema } from '../sprints/schemas';
 import { projectController } from './projects.controller';
 import {
 	createProjectSchema,
@@ -41,5 +42,20 @@ router.delete(
 	projectController.deleteMember,
 );
 router.delete('/:id', isAuthenticated, projectController.deleteProject);
+
+/**
+ * Sprints Module Routes
+ */
+router.post(
+	'/:id/sprints',
+	validateRequest(createSprintSchema),
+	isAuthenticated,
+	projectController.postProjectSprint,
+);
+router.get(
+	'/:id/sprints',
+	isAuthenticated,
+	projectController.getProjectSprints,
+);
 
 export const projectsRoutes = router;

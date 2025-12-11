@@ -1728,7 +1728,7 @@ paths:
                       data:
                         $ref: "#/components/schemas/Sprint"
 
-    put:
+    patch:
       tags:
         - Sprints
       summary: Update sprint
@@ -1783,39 +1783,6 @@ paths:
       responses:
         "200":
           description: Sprint deleted successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Success"
-
-  /sprints/reorder:
-    put:
-      tags:
-        - Sprints
-      summary: Reorder sprints
-      security:
-        - CookieAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - sprints
-              properties:
-                sprints:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      id:
-                        type: string
-                      order:
-                        type: integer
-      responses:
-        "200":
-          description: Sprints reordered successfully
           content:
             application/json:
               schema:
