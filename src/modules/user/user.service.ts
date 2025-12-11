@@ -103,8 +103,8 @@ export const updatePassword = async (
 	}
 
 	const { oldPassword, newPassword } = payload;
-	const isMatched = await compareService(oldPassword, isExist.password);
 
+	const isMatched = await compareService(oldPassword, isExist.password);
 	if (!isMatched) {
 		throw new UnauthorizedError('Invalid old password');
 	}
