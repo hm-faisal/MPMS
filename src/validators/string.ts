@@ -2,20 +2,22 @@ import z from 'zod';
 
 /**
  * Validate string
- * @param label string
- * @returns Zod schema for string validation
+ * @param { string } label - label for the field
+ * @returns { ZodString } Zod schema for string validation
  */
-export const validateString = (label: string) =>
+export const validateString = (label: string): z.ZodString =>
 	z
 		.string({ error: `${label} is required` })
 		.min(1, { message: `${label} cannot be empty` });
 
 /**
- * Validate optional string
- * @param label string
- * @returns Zod schema for optional string validation
+ * Validate optional nullable string
+ * @param {string} label - label for the field
+ * @returns {z.ZodOptional<z.ZodString>}
  */
-export const validateOptionalString = (label: string) =>
+export const validateOptionalString = (
+	label: string,
+): z.ZodOptional<z.ZodString> =>
 	z
 		.string()
 		.min(1, { message: `${label} cannot be empty` })
@@ -23,10 +25,10 @@ export const validateOptionalString = (label: string) =>
 
 /**
  * Validate string array
- * @param label string
- * @returns Zod schema for string array validation
+ * @param { string } label - label for the field
+ * @returns { ZodArray<ZodString> } Zod schema for string array validation
  */
-export const validateStringArray = (label: string) =>
+export const validateStringArray = (label: string): z.ZodArray<z.ZodString> =>
 	z
 		.array(
 			z
@@ -38,10 +40,12 @@ export const validateStringArray = (label: string) =>
 
 /**
  * Validate optional string array
- * @param label string
- * @returns Zod schema for optional string array validation
+ * @param { string } label - label for the field
+ * @returns { ZodNullable<ZodOptional<ZodArray<ZodString>>> } Zod schema for optional string array validation
  */
-export const validateOptionalStringArray = (label: string) =>
+export const validateOptionalStringArray = (
+	label: string,
+): z.ZodNullable<z.ZodOptional<z.ZodArray<z.ZodString>>> =>
 	z
 		.array(
 			z
@@ -50,4 +54,5 @@ export const validateOptionalStringArray = (label: string) =>
 			{ error: `${label} must be an array of strings` },
 		)
 		.min(1, { message: `${label} must contain at least one item` })
-		.optional();
+		.optional()
+		.nullable();
