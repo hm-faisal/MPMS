@@ -1398,6 +1398,12 @@ paths:
                       $ref: "#/components/schemas/Project"
                   pagination:
                     $ref: "#/components/schemas/Pagination"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "500":
+          $ref: "#/components/responses/500"
 
     post:
       tags:
@@ -1453,6 +1459,17 @@ paths:
                       data:
                         $ref: "#/components/schemas/Project"
 
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+        "500":
+          $ref: "#/components/responses/500"
+
   /projects/{id}:
     get:
       tags:
@@ -1480,6 +1497,10 @@ paths:
                         $ref: "#/components/schemas/Project"
         "404":
           $ref: "#/components/responses/404"
+        "401":
+          $ref: "#/components/responses/401"
+        "500":
+          $ref: "#/components/responses/500"
 
     patch:
       tags:
@@ -1531,6 +1552,14 @@ paths:
                     properties:
                       data:
                         $ref: "#/components/schemas/Project"
+        "404":
+          $ref: "#/components/responses/404"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "500":
+          $ref: "#/components/responses/500"
 
     delete:
       tags:
@@ -1552,6 +1581,14 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Success"
+        "404":
+          $ref: "#/components/responses/404"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "500":
+          $ref: "#/components/responses/500"
 
   /projects/{id}/stats:
     get:
