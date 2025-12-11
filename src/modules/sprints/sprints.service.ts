@@ -22,14 +22,9 @@ export const createSprintAndAttachToProject = async (
 	project: ProjectType;
 }> => {
 	try {
-		const existedSprints = await Sprint.countDocuments({
-			projectId,
-		});
-
 		const sprint: HydratedDocument<SprintType> = await Sprint.create({
 			...sprintData,
 			projectId,
-			order: existedSprints + 1,
 		});
 
 		if (!sprint) {
