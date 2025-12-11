@@ -1,7 +1,9 @@
 import { ProjectStatus } from '@/constants';
-import { BadRequestError, NotFoundError } from '@/errors';
+import { BadRequestError, InternalServerError, NotFoundError } from '@/errors';
 import { Project, type ProjectType } from '@/models/Project';
 import { User } from '@/models/User';
+import type { CreateSprintSchema } from '../sprints/schemas';
+import { createSprintAndAttachToProject } from '../sprints/sprints.service';
 import type { MemberSchema, UpdateProjectSchema } from './schemas';
 
 /**
@@ -189,6 +191,47 @@ export const deleteMember = async (
 	return updatedProject;
 };
 
+/**
+ * Post sprint to project
+ * @param {string} id - Project id
+ * @param {CreateSprintSchema} data - Sprint data
+ * @returns { Promise<ProjectType | null> } - Updated project
+ */
+export const postProjectSprint = async (
+	id: string,
+	data: CreateSprintSchema,
+): Promise<ProjectType | null> => {
+	const existingProject = await Project.findById(id);
+	if (!existingProject) {
+		throw new NotFoundError('Project not found');
+	}
+
+	const { success, project } = await createSprintAndAttachToProject(id, data);
+	if (!success) {
+		throw new InternalServerError('Sprint create operation failed');
+	}
+
+	return project;
+};
+
+/**
+ * Get project sprints by id
+ * @param {string} id - Project id
+ * @returns { Promise<ProjectType | null> } - Project sprints
+ */
+
+export const getProjectSprintsById = async (id: string) => {
+	const isExist = await Project.findById(id);
+	if (!isExist) {
+		throw new NotFoundError('Project not found');
+	}
+
+	const project = await Project.findById(id)
+		.select('sprints')
+		.populate('sprints');
+	return project;
+};
+
 export const projectService = {
 	createProject,
 	getProjectById,
@@ -197,4 +240,6 @@ export const projectService = {
 	postMember,
 	getProjectMembersById,
 	deleteMember,
+	postProjectSprint,
+	getProjectSprintsById,
 };
