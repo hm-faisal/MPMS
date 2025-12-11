@@ -15,12 +15,6 @@ const sprintSchema = new Schema(
 			type: String,
 			required: true,
 		},
-		order: {
-			type: Number,
-			unique: true,
-			required: true,
-			default: 1,
-		},
 		projectId: {
 			type: Schema.ObjectId,
 			ref: 'Project',
