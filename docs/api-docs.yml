@@ -1481,7 +1481,7 @@ paths:
         "404":
           $ref: "#/components/responses/404"
 
-    put:
+    patch:
       tags:
         - Projects
       summary: Update project
