@@ -11,7 +11,7 @@ import type { CorsOptions } from 'cors';
  * @type {CorsOptions}
  */
 export const corsConfig: CorsOptions = {
-	origin: config.get('cors.origin'),
+	origin: config.get<string>('cors.origin').split(','),
 	credentials: true,
 	optionsSuccessStatus: 200,
 	methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
