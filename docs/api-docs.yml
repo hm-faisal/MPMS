@@ -22,9 +22,9 @@ servers:
     description: Development server api
   - url: http://localhost:8080
     description: Development server
-  - url: https://api.mpms.example.com/api/v1
+  - url: https://https://mpms-cv4d.onrender.com/api/v1
     description: Production server api
-  - url: https://api.mpms.example.com
+  - url: https://https://mpms-cv4d.onrender.com
     description: Production server
 
 tags:
@@ -38,16 +38,6 @@ tags:
     description: Sprint management operations
   - name: Tasks
     description: Task management operations
-  - name: Comments
-    description: Task comments and discussions
-  - name: Reports
-    description: Reporting and analytics
-  - name: Search
-    description: Global search functionality
-  - name: Dashboard
-    description: Dashboard statistics and widgets
-  - name: Notifications
-    description: User notifications and alerts
 
 paths:
   # ==================== Authentication ====================
@@ -129,6 +119,7 @@ paths:
 
         "500":
           $ref: "#/components/responses/500"
+
   /auth/login:
     post:
       tags:
@@ -180,6 +171,7 @@ paths:
                         example: "/api/dashboard/"
         "500":
           $ref: "#/components/responses/500"
+
   /auth/me:
     get:
       tags:
@@ -205,27 +197,43 @@ paths:
           $ref: "#/components/responses/403"
         "404":
           $ref: "#/components/responses/404"
+
   /auth/logout:
     post:
       tags:
         - Authentication
       summary: User logout
+      description: Clears authentication cookie and logs out user
       security:
         - CookieAuth: []
       responses:
-        "200":
+        "204":
           description: Logout successful
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Success"
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 204
+                  message:
+                    type: string
+                    example: "User logged out successfully"
+                  data:
+                    nullable: true
+                    example: null
         "500":
           $ref: "#/components/responses/500"
+
   /auth/forgot-password:
     post:
       tags:
         - Authentication
-      summary: Request password reset
+      summary: Request password reset (Not Implemented Yet)
+      description: >
+        **Note**: This endpoint is defined in routes but not yet implemented.
+        It will initiate the password reset process by sending a reset link to the user's email.
       requestBody:
         required: true
         content:
@@ -238,19 +246,21 @@ paths:
                 email:
                   type: string
                   format: email
+                  example: "user@example.com"
       responses:
         "200":
-          description: Password reset email sent
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Success"
+          description: Password reset email sent (placeholder)
+        "501":
+          description: Not Implemented
 
   /auth/reset-password:
     post:
       tags:
         - Authentication
-      summary: Reset password
+      summary: Reset password with token (Not Implemented Yet)
+      description: >
+        **Note**: This endpoint is defined in routes but not yet implemented.
+        It will allow users to reset their password using a token received via email.
       requestBody:
         required: true
         content:
@@ -263,319 +273,16 @@ paths:
               properties:
                 token:
                   type: string
+                  example: "reset-token-123"
                 newPassword:
                   type: string
                   format: password
+                  example: "NewSecurePass123!"
       responses:
         "200":
-          description: Password reset successful
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Success"
-
-  # ==================== Comments ====================
-  /comments/{id}:
-    put:
-      tags:
-        - Comments
-      summary: Update comment
-      security:
-        - CookieAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                content:
-                  type: string
-      responses:
-        "200":
-          description: Comment updated successfully
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/Success"
-                  - type: object
-                    properties:
-                      data:
-                        $ref: "#/components/schemas/Comment"
-
-    delete:
-      tags:
-        - Comments
-      summary: Delete comment
-      security:
-        - CookieAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Comment deleted successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Success"
-
-  # ==================== Reports ====================
-  /reports/project/{projectId}:
-    get:
-      tags:
-        - Reports
-      summary: Get project report
-      security:
-        - CookieAuth: []
-      parameters:
-        - name: projectId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Project report retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  data:
-                    type: object
-                    properties:
-                      project:
-                        $ref: "#/components/schemas/Project"
-                      totalTasks:
-                        type: integer
-                      completedTasks:
-                        type: integer
-                      tasksInProgress:
-                        type: integer
-                      tasksInReview:
-                        type: integer
-                      todoTasks:
-                        type: integer
-                      completionPercentage:
-                        type: number
-                      totalTimeLogged:
-                        type: number
-                      totalEstimatedTime:
-                        type: number
-                      tasksByPriority:
-                        type: object
-                        properties:
-                          Low:
-                            type: integer
-                          Medium:
-                            type: integer
-                          High:
-                            type: integer
-                          Critical:
-                            type: integer
-                      sprintProgress:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            sprintId:
-                              type: string
-                            sprintTitle:
-                              type: string
-                            completionPercentage:
-                              type: number
-
-  /reports/user/{userId}:
-    get:
-      tags:
-        - Reports
-      summary: Get user report
-      security:
-        - CookieAuth: []
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: startDate
-          in: query
-          schema:
-            type: string
-            format: date
-        - name: endDate
-          in: query
-          schema:
-            type: string
-            format: date
-      responses:
-        "200":
-          description: User report retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  data:
-                    type: object
-                    properties:
-                      user:
-                        $ref: "#/components/schemas/User"
-                      assignedTasks:
-                        type: integer
-                      completedTasks:
-                        type: integer
-                      inProgressTasks:
-                        type: integer
-                      totalTimeLogged:
-                        type: number
-                      tasksCompletedOnTime:
-                        type: integer
-                      overdueTasksCompleted:
-                        type: integer
-                      currentOverdueTasks:
-                        type: integer
-                      projectsInvolved:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            projectId:
-                              type: string
-                            projectTitle:
-                              type: string
-                            tasksAssigned:
-                              type: integer
-                            tasksCompleted:
-                              type: integer
-
-  /reports/overview:
-    get:
-      tags:
-        - Reports
-      summary: Get system overview report
-      description: Get overall system statistics (Admin only)
-      security:
-        - CookieAuth: []
-      responses:
-        "200":
-          description: System overview retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  data:
-                    type: object
-                    properties:
-                      totalProjects:
-                        type: integer
-                      activeProjects:
-                        type: integer
-                      completedProjects:
-                        type: integer
-                      totalUsers:
-                        type: integer
-                      activeUsers:
-                        type: integer
-                      totalTasks:
-                        type: integer
-                      completedTasks:
-                        type: integer
-                      totalTimeLogged:
-                        type: number
-                      projectsByStatus:
-                        type: object
-                      tasksByStatus:
-                        type: object
-                      recentActivity:
-                        type: array
-                        items:
-                          $ref: "#/components/schemas/ActivityLog"
-
-  # ==================== Activity Logs ====================
-  /tasks/{taskId}/activity:
-    get:
-      tags:
-        - Tasks
-      summary: Get activity log for a task
-      security:
-        - CookieAuth: []
-      parameters:
-        - name: taskId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: limit
-          in: query
-          schema:
-            type: integer
-            default: 50
-      responses:
-        "200":
-          description: Activity log retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  data:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/ActivityLog"
-
-  /projects/{projectId}/activity:
-    get:
-      tags:
-        - Projects
-      summary: Get activity log for a project
-      security:
-        - CookieAuth: []
-      parameters:
-        - name: projectId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: limit
-          in: query
-          schema:
-            type: integer
-            default: 50
-      responses:
-        "200":
-          description: Activity log retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  data:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/ActivityLog"
+          description: Password reset successful (placeholder)
+        "501":
+          description: Not Implemented
 
   # ==================== User Profile ====================
   /users/profile:
@@ -655,6 +362,19 @@ paths:
       responses:
         "200":
           description: Password changed successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Success"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/User"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
 
   # ==================== Project Team Management ====================
   /projects/{projectId}/members:
@@ -746,402 +466,15 @@ paths:
               schema:
                 $ref: "#/components/schemas/Success"
 
-  # ==================== Task Assignment ====================
-  /tasks/{taskId}/assign:
-    post:
-      tags:
-        - Tasks
-      summary: Assign users to task
-      security:
-        - CookieAuth: []
-      parameters:
-        - name: taskId
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - userIds
-              properties:
-                userIds:
-                  type: array
-                  items:
-                    type: string
-      responses:
-        "200":
-          description: Users assigned successfully
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/Success"
-                  - type: object
-                    properties:
-                      data:
-                        $ref: "#/components/schemas/Task"
-
-  /tasks/{taskId}/unassign:
-    post:
-      tags:
-        - Tasks
-      summary: Unassign users from task
-      security:
-        - CookieAuth: []
-      parameters:
-        - name: taskId
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - userIds
-              properties:
-                userIds:
-                  type: array
-                  items:
-                    type: string
-      responses:
-        "200":
-          description: Users unassigned successfully
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/Success"
-                  - type: object
-                    properties:
-                      data:
-                        $ref: "#/components/schemas/Task"
-
-  # ==================== Attachments ====================
-  /attachments/{filename}:
-    get:
-      tags:
-        - Tasks
-      summary: Download attachment
-      security:
-        - CookieAuth: []
-      parameters:
-        - name: filename
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: File downloaded successfully
-          content:
-            application/octet-stream:
-              schema:
-                type: string
-                format: binary
-
-  /tasks/{taskId}/attachments/{attachmentId}:
-    delete:
-      tags:
-        - Tasks
-      summary: Delete attachment
-      security:
-        - CookieAuth: []
-      parameters:
-        - name: taskId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: attachmentId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Attachment deleted successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Success"
-
-  # ==================== Search ====================
-  /search:
-    get:
-      tags:
-        - Search
-      summary: Global search across projects, tasks, and users
-      security:
-        - CookieAuth: []
-      parameters:
-        - name: q
-          in: query
-          required: true
-          schema:
-            type: string
-          description: Search query
-        - name: type
-          in: query
-          schema:
-            type: string
-            enum: [all, projects, tasks, users]
-            default: all
-        - name: limit
-          in: query
-          schema:
-            type: integer
-            default: 20
-      responses:
-        "200":
-          description: Search results retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  data:
-                    type: object
-                    properties:
-                      projects:
-                        type: array
-                        items:
-                          $ref: "#/components/schemas/Project"
-                      tasks:
-                        type: array
-                        items:
-                          $ref: "#/components/schemas/Task"
-                      users:
-                        type: array
-                        items:
-                          $ref: "#/components/schemas/User"
-
-  # ==================== Dashboard Analytics ====================
-  /dashboard/stats:
-    get:
-      tags:
-        - Dashboard
-      summary: Get dashboard statistics for current user
-      security:
-        - CookieAuth: []
-      responses:
-        "200":
-          description: Dashboard statistics retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  data:
-                    type: object
-                    properties:
-                      myTasks:
-                        type: object
-                        properties:
-                          total:
-                            type: integer
-                          todo:
-                            type: integer
-                          inProgress:
-                            type: integer
-                          review:
-                            type: integer
-                          done:
-                            type: integer
-                      myProjects:
-                        type: integer
-                      upcomingDeadlines:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            taskId:
-                              type: string
-                            title:
-                              type: string
-                            dueDate:
-                              type: string
-                              format: date
-                            daysRemaining:
-                              type: integer
-                      recentActivity:
-                        type: array
-                        items:
-                          $ref: "#/components/schemas/ActivityLog"
-                      timeLoggedThisWeek:
-                        type: number
-
-  # ==================== Batch Operations ====================
-  /tasks/batch/update:
-    put:
-      tags:
-        - Tasks
-      summary: Batch update tasks
-      security:
-        - CookieAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - taskIds
-                - updates
-              properties:
-                taskIds:
-                  type: array
-                  items:
-                    type: string
-                updates:
-                  type: object
-                  properties:
-                    status:
-                      type: string
-                    priority:
-                      type: string
-                    assignees:
-                      type: array
-                      items:
-                        type: string
-      responses:
-        "200":
-          description: Tasks updated successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  data:
-                    type: object
-                    properties:
-                      updatedCount:
-                        type: integer
-                      failedCount:
-                        type: integer
-
-  /tasks/batch/delete:
-    delete:
-      tags:
-        - Tasks
-      summary: Batch delete tasks
-      security:
-        - CookieAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - taskIds
-              properties:
-                taskIds:
-                  type: array
-                  items:
-                    type: string
-      responses:
-        "200":
-          description: Tasks deleted successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Success"
-
-  # ==================== Export ====================
-  /reports/export/project/{projectId}:
-    get:
-      tags:
-        - Reports
-      summary: Export project report
-      security:
-        - CookieAuth: []
-      parameters:
-        - name: projectId
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: format
-          in: query
-          schema:
-            type: string
-            enum: [pdf, csv, excel]
-            default: pdf
-      responses:
-        "200":
-          description: Report exported successfully
-          content:
-            application/pdf:
-              schema:
-                type: string
-                format: binary
-            text/csv:
-              schema:
-                type: string
-            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
-              schema:
-                type: string
-                format: binary
-
-  /reports/export/tasks:
-    get:
-      tags:
-        - Reports
-      summary: Export tasks report
-      security:
-        - CookieAuth: []
-      parameters:
-        - name: projectId
-          in: query
-          schema:
-            type: string
-        - name: sprintId
-          in: query
-          schema:
-            type: string
-        - name: status
-          in: query
-          schema:
-            type: string
-        - name: format
-          in: query
-          schema:
-            type: string
-            enum: [csv, excel]
-            default: csv
-      responses:
-        "200":
-          description: Tasks exported successfully
-          content:
-            text/csv:
-              schema:
-                type: string
-            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
-              schema:
-                type: string
-                format: binary
-
   # ==================== Sprint Statistics ====================
   /sprints/{id}/stats:
     get:
       tags:
         - Sprints
-      summary: Get sprint statistics
+      summary: Get sprint statistics (Partially Implemented)
+      description: >
+        **Note**: This endpoint exists in routes but returns an empty handler.
+        Implementation is incomplete. It will return sprint statistics when fully implemented.
       security:
         - CookieAuth: []
       parameters:
@@ -1190,107 +523,8 @@ paths:
                               format: date
                             remainingTasks:
                               type: integer
-
-  # ==================== Notifications (Optional) ====================
-  /notifications:
-    get:
-      tags:
-        - Notifications
-      summary: Get user notifications
-      security:
-        - CookieAuth: []
-      parameters:
-        - name: unreadOnly
-          in: query
-          schema:
-            type: boolean
-            default: false
-        - name: limit
-          in: query
-          schema:
-            type: integer
-            default: 20
-      responses:
-        "200":
-          description: Notifications retrieved successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  success:
-                    type: boolean
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        _id:
-                          type: string
-                        type:
-                          type: string
-                          enum:
-                            [
-                              task_assigned,
-                              task_updated,
-                              comment_added,
-                              status_changed,
-                              mention,
-                            ]
-                        message:
-                          type: string
-                        relatedId:
-                          type: string
-                        isRead:
-                          type: boolean
-                        createdAt:
-                          type: string
-                          format: date-time
-
-  /notifications/{id}/read:
-    patch:
-      tags:
-        - Notifications
-      summary: Mark notification as read
-      security:
-        - CookieAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Notification marked as read
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Success"
-
-  /notifications/read-all:
-    patch:
-      tags:
-        - Notifications
-      summary: Mark all notifications as read
-      security:
-        - CookieAuth: []
-      responses:
-        "200":
-          description: All notifications marked as read
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    $ref: "#/components/schemas/User"
-        "400":
-          $ref: "#/components/responses/400"
-        "401":
-          $ref: "#/components/responses/401"
-        "403":
-          $ref: "#/components/responses/403"
+        "501":
+          description: Not Implemented
 
   # ==================== Users ====================
   /users:
@@ -1371,9 +605,88 @@ paths:
                     properties:
                       data:
                         $ref: "#/components/schemas/User"
+        "400":
+          $ref: "#/components/responses/400"
+        "404":
+          $ref: "#/components/responses/404"
+
+    patch:
+      tags:
+        - Users
+      summary: Update user by ID
+      description: Update user profile (Admin/Manager only)
+      security:
+        - CookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                role:
+                  type: string
+                  enum: [Admin, Manager, Member]
+                department:
+                  type: string
+                skills:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        "200":
+          description: User updated successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Success"
+                  - type: object
+                    properties:
+                      data:
+                        $ref: "#/components/schemas/User"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+
+    delete:
+      tags:
+        - Users
+      summary: Delete user
+      description: Delete user (Admin/Manager only)
+      security:
+        - CookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: User deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Success"
         "404":
           description: User not found
-
   # ==================== Projects ====================
   /projects:
     get:
@@ -1618,7 +931,10 @@ paths:
     get:
       tags:
         - Projects
-      summary: Get project statistics
+      summary: Get project statistics (Not Implemented Yet)
+      description: >
+        **Note**: This endpoint is defined in routes but not yet implemented.
+        It will return project statistics including task counts and completion metrics.
       security:
         - CookieAuth: []
       parameters:
@@ -1629,7 +945,7 @@ paths:
             type: string
       responses:
         "200":
-          description: Project statistics retrieved
+          description: Project statistics retrieved (placeholder)
           content:
             application/json:
               schema:
@@ -1652,8 +968,66 @@ paths:
                         type: number
                       estimatedTimeRemaining:
                         type: number
+        "501":
+          description: Not Implemented
+
+  /projects/{id}/activity:
+    get:
+      tags:
+        - Projects
+      summary: Get project activity log (Not Implemented Yet)
+      description: >
+        **Note**: This endpoint is defined in routes but not yet implemented.
+        It will return activity logs for the project.
+      security:
+        - CookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Activity log retrieved (placeholder)
+        "501":
+          description: Not Implemented
 
   # ==================== Sprints ====================
+  /sprints:
+    get:
+      tags:
+        - Sprints
+      summary: Get all sprints
+      description: Retrieve all sprints across all projects
+      security:
+        - CookieAuth: []
+      responses:
+        "200":
+          description: Sprints retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Sprints fetched successfully"
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Sprint"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+
   /projects/{projectId}/sprints:
     get:
       tags:
@@ -1675,17 +1049,33 @@ paths:
               schema:
                 type: object
                 properties:
+                  code:
+                    type: integer
+                    example: 200
                   success:
                     type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Sprints fetched successfully"
                   data:
                     type: array
                     items:
                       $ref: "#/components/schemas/Sprint"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
 
     post:
       tags:
         - Sprints
       summary: Create new sprint
+      description: Create new sprint for a project
       security:
         - CookieAuth: []
       parameters:
@@ -1725,6 +1115,12 @@ paths:
                     properties:
                       data:
                         $ref: "#/components/schemas/Sprint"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
 
   /sprints/{id}:
     get:
@@ -1805,78 +1201,84 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        "204":
           description: Sprint deleted successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Success"
-
-  # ==================== Tasks ====================
-  /tasks:
-    get:
-      tags:
-        - Tasks
-      summary: Get all tasks with filters
-      security:
-        - CookieAuth: []
-      parameters:
-        - name: projectId
-          in: query
-          schema:
-            type: string
-        - name: sprintId
-          in: query
-          schema:
-            type: string
-        - name: assignee
-          in: query
-          schema:
-            type: string
-        - name: status
-          in: query
-          schema:
-            type: string
-            enum: [To Do, In Progress, Review, Done]
-        - name: priority
-          in: query
-          schema:
-            type: string
-            enum: [Low, Medium, High, Critical]
-        - name: page
-          in: query
-          schema:
-            type: integer
-            default: 1
-        - name: limit
-          in: query
-          schema:
-            type: integer
-            default: 20
-      responses:
-        "200":
-          description: Tasks retrieved successfully
           content:
             application/json:
               schema:
                 type: object
                 properties:
+                  code:
+                    type: integer
+                    example: 204
+                  message:
+                    type: string
+                    example: "Sprint deleted successfully"
+                  data:
+                    nullable: true
+                    example: null
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
+
+  /sprints/{id}/tasks:
+    get:
+      tags:
+        - Tasks
+      summary: Get tasks for a sprint
+      description: Retrieve all tasks under a specific sprint
+      security:
+        - CookieAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Sprint tasks fetched successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
                   success:
                     type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Sprint tasks fetched successfully"
                   data:
                     type: array
                     items:
                       $ref: "#/components/schemas/Task"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
 
-  /sprints/{sprintId}/tasks:
     post:
       tags:
         - Tasks
-      summary: Create new task
+      summary: Create new task under sprint
+      description: Create a new task for a specific sprint
       security:
         - CookieAuth: []
       parameters:
-        - name: sprintId
+        - name: id
           in: path
           required: true
           schema:
@@ -1934,6 +1336,80 @@ paths:
                     properties:
                       data:
                         $ref: "#/components/schemas/Task"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+
+  # ==================== Tasks ====================
+  /tasks:
+    get:
+      tags:
+        - Tasks
+      summary: Get all tasks with filters
+      description: Retrieve all tasks with optional filtering
+      security:
+        - CookieAuth: []
+      parameters:
+        - name: projectId
+          in: query
+          schema:
+            type: string
+        - name: sprintId
+          in: query
+          schema:
+            type: string
+        - name: assignee
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [To Do, In Progress, Review, Done]
+        - name: priority
+          in: query
+          schema:
+            type: string
+            enum: [Low, Medium, High, Critical]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 20
+      responses:
+        "200":
+          description: Tasks retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 200
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Tasks fetched successfully"
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Task"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
 
   /tasks/{id}:
     get:
@@ -1960,11 +1436,18 @@ paths:
                     properties:
                       data:
                         $ref: "#/components/schemas/Task"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "404":
+          $ref: "#/components/responses/404"
 
-    put:
+    patch:
       tags:
         - Tasks
       summary: Update task
+      description: Update task details
       security:
         - CookieAuth: []
       parameters:
@@ -2011,6 +1494,14 @@ paths:
                     properties:
                       data:
                         $ref: "#/components/schemas/Task"
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
 
     delete:
       tags:
@@ -2025,192 +1516,30 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        "204":
           description: Task deleted successfully
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Success"
-
-  /tasks/{id}/status:
-    patch:
-      tags:
-        - Tasks
-      summary: Update task status
-      security:
-        - CookieAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - status
-              properties:
-                status:
-                  type: string
-                  enum: [To Do, In Progress, Review, Done]
-      responses:
-        "200":
-          description: Task status updated successfully
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/Success"
-                  - type: object
-                    properties:
-                      data:
-                        $ref: "#/components/schemas/Task"
-
-  /tasks/{id}/time-log:
-    post:
-      tags:
-        - Tasks
-      summary: Log time on task
-      security:
-        - CookieAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - hours
-              properties:
-                hours:
-                  type: number
-                  example: 2.5
-                description:
-                  type: string
-                  example: "Implemented authentication logic"
-      responses:
-        "200":
-          description: Time logged successfully
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/Success"
-                  - type: object
-                    properties:
-                      data:
-                        $ref: "#/components/schemas/Task"
-
-  /tasks/{id}/attachments:
-    post:
-      tags:
-        - Tasks
-      summary: Upload attachment to task
-      security:
-        - CookieAuth: []
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                file:
-                  type: string
-                  format: binary
-      responses:
-        "200":
-          description: Attachment uploaded successfully
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/Success"
-                  - type: object
-                    properties:
-                      data:
-                        $ref: "#/components/schemas/Attachment"
-
-  # ==================== Comments ====================
-  /tasks/{taskId}/comments:
-    get:
-      tags:
-        - Comments
-      summary: Get all comments for a task
-      security:
-        - CookieAuth: []
-      parameters:
-        - name: taskId
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        "200":
-          description: Comments retrieved successfully
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  success:
-                    type: boolean
+                  code:
+                    type: integer
+                    example: 204
+                  message:
+                    type: string
+                    example: "Task deleted successfully"
                   data:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/Comment"
-
-    post:
-      tags:
-        - Comments
-      summary: Add comment to task
-      security:
-        - CookieAuth: []
-      parameters:
-        - name: taskId
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - content
-              properties:
-                content:
-                  type: string
-                  example: "This looks good, but we need to add error handling"
-                parentCommentId:
-                  type: string
-                  nullable: true
-      responses:
-        "201":
-          description: Comment added successfully
-          content:
-            application/json:
-              schema:
-                allOf:
-                  - $ref: "#/components/schemas/Success"
+                    nullable: true
+                    example: null
+        "400":
+          $ref: "#/components/responses/400"
+        "401":
+          $ref: "#/components/responses/401"
+        "403":
+          $ref: "#/components/responses/403"
+        "404":
+          $ref: "#/components/responses/404"
 
 components:
   securitySchemes:

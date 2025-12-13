@@ -29,6 +29,21 @@ const getSprintById = catchAsync(async (req, res) => {
 });
 
 /**
+ * Get all sprints
+ * @route GET /api/v1/sprints
+ * @access Private
+ */
+const getSprints = catchAsync(async (_req, res) => {
+	const sprints = await sprintService.getSprints();
+
+	return sendResponse(res, {
+		code: 200,
+		message: 'Sprints fetched successfully',
+		data: sprints,
+	});
+});
+
+/**
  * Update sprint
  * @route PATCH /api/v1/sprints/:id
  * @requires { string } params.id - Sprint ID
@@ -110,6 +125,7 @@ const getSprintTasks = catchAsync(async (req, res) => {
 
 export const sprintController = {
 	getSprintsStats,
+	getSprints,
 	getSprintById,
 	updateSprintById,
 	deleteSprint,

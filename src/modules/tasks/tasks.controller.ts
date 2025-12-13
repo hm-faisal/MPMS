@@ -46,4 +46,25 @@ const updateTaskById = catchAsync(async (req, res) => {
 	});
 });
 
-export const taskController = { getTaskById, getTasks, updateTaskById };
+const deleteTask = catchAsync(async (req, res) => {
+	const id = req.params['id'];
+
+	if (!id) {
+		throw new BadRequestError('Task id is required');
+	}
+
+	await taskService.deleteTask(id);
+
+	return sendResponse(res, {
+		code: 204,
+		data: null,
+		message: 'Task deleted successfully',
+	});
+});
+
+export const taskController = {
+	getTaskById,
+	getTasks,
+	updateTaskById,
+	deleteTask,
+};

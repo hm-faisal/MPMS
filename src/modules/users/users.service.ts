@@ -125,3 +125,26 @@ export const updatePassword = async (
 
 	return updatedUser;
 };
+
+/**
+ * Delete user by id
+ * @param { string } id User id
+ * @returns void Promise
+ */
+
+export const deleteUser = async (id: string) => {
+	const isExist = await User.findById(id);
+	if (!isExist) {
+		throw new NotFoundError('User not found');
+	}
+
+	await User.deleteOne({ _id: id });
+};
+
+export const userService = {
+	getUserProfile,
+	getAllUsers,
+	updateUserProfile,
+	updatePassword,
+	deleteUser,
+};

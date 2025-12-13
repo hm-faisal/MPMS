@@ -73,6 +73,16 @@ export const getSprintById = async (id: string): Promise<SprintType | null> => {
 };
 
 /**
+ * Get all sprints
+ * @returns { Promise<SprintType[] | null> } - Sprint data
+ */
+
+export const getSprints = async (): Promise<SprintType[] | null> => {
+	const sprints = await Sprint.find().populate('tasks');
+	return sprints;
+};
+
+/**
  * Update sprint by id
  * @param { string } id - Sprint id
  * @param { UpdateSprintSchemaType } sprintData - Sprint data
@@ -150,6 +160,7 @@ export const getSprintTasks = async (id: string) => {
 
 export const sprintService = {
 	getSprintById,
+	getSprints,
 	updateSprintById,
 	deleteSprintById,
 	createTask,

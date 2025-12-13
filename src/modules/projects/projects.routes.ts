@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { isAuthenticated } from '@/middleware/authenticate.middleware';
+import { hasPermission } from '@/middleware/has-permission.middleware';
 import { validateRequest } from '@/middleware/validate-request.middleware';
 import { createSprintSchema } from '../sprints/schemas';
 import { projectController } from './projects.controller';
@@ -21,6 +22,7 @@ router.post(
 	'/',
 	validateRequest(createProjectSchema),
 	isAuthenticated,
+	hasPermission('createProject'),
 	projectController.postProject,
 );
 // TODO: add :id/stats
@@ -28,12 +30,23 @@ router.get('/:id/stats', isAuthenticated, () => {});
 // TODO: add :id/activity
 router.get('/:id/activity', isAuthenticated, () => {});
 router.get('/:id/members', isAuthenticated, projectController.getMembers);
-router.get('/:id', isAuthenticated, projectController.getProject);
-router.get('/', isAuthenticated, projectController.getProjects);
+router.get(
+	'/:id',
+	isAuthenticated,
+	hasPermission('viewProject'),
+	projectController.getProject,
+);
+router.get(
+	'/',
+	isAuthenticated,
+	hasPermission('viewProject'),
+	projectController.getProjects,
+);
 router.patch(
 	'/:id',
 	validateRequest(updateProjectSchema),
 	isAuthenticated,
+	hasPermission('editProject'),
 	projectController.patchProject,
 );
 router.delete(
@@ -50,11 +63,13 @@ router.post(
 	'/:id/sprints',
 	validateRequest(createSprintSchema),
 	isAuthenticated,
+	hasPermission('createSprint'),
 	projectController.postProjectSprint,
 );
 router.get(
 	'/:id/sprints',
 	isAuthenticated,
+	hasPermission('viewSprint'),
 	projectController.getProjectSprints,
 );
 

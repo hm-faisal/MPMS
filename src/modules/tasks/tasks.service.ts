@@ -94,7 +94,19 @@ export const getTaskById = async (id: string): Promise<TaskType | null> => {
  */
 
 export const getTasks = async () => {
-	const tasks = await Task.find();
+	const tasks = await Task.find().populate([
+		{
+			path: 'assignees',
+			select: '_id name email',
+		},
+		{
+			path: 'sprint',
+			populate: {
+				path: 'projectId',
+				select: '_id name',
+			},
+		},
+	]);
 	return tasks;
 };
 
@@ -116,8 +128,23 @@ export const updateTaskById = async (
 	return task;
 };
 
+/**
+ * Delete task by id
+ * @param { string } id - Task id
+ * @returns { Promise<void> }
+ */
+
+export const deleteTask = async (id: string): Promise<void> => {
+	const task = await Task.findByIdAndDelete(id);
+	await Sprint.updateMany({ tasks: id }, { $pull: { tasks: id } });
+	if (!task) {
+		throw new NotFoundError('Task not found');
+	}
+};
+
 export const taskService = {
 	getTaskById,
 	getTasks,
 	updateTaskById,
+	deleteTask,
 };
