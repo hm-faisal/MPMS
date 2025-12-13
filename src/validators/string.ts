@@ -8,6 +8,7 @@ import z from 'zod';
 export const validateString = (label: string): z.ZodString =>
 	z
 		.string({ error: `${label} is required` })
+		.trim()
 		.min(1, { message: `${label} cannot be empty` });
 
 /**
@@ -20,6 +21,7 @@ export const validateOptionalString = (
 ): z.ZodOptional<z.ZodString> =>
 	z
 		.string()
+		.trim()
 		.min(1, { message: `${label} cannot be empty` })
 		.optional();
 
@@ -33,6 +35,7 @@ export const validateStringArray = (label: string): z.ZodArray<z.ZodString> =>
 		.array(
 			z
 				.string({ error: `${label} must be a string` })
+				.trim()
 				.min(1, { message: `${label} cannot contain empty strings` }),
 			{ error: `${label} must be an array of strings` },
 		)
@@ -50,6 +53,7 @@ export const validateOptionalStringArray = (
 		.array(
 			z
 				.string({ error: `${label} must be a string` })
+				.trim()
 				.min(1, { message: `${label} cannot contain empty strings` }),
 			{ error: `${label} must be an array of strings` },
 		)
