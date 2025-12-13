@@ -11,6 +11,9 @@ import { applicationRoutes } from '@/routes';
 
 const app: Application = express();
 
+// app.ts / server.ts (TOP, before routes)
+app.set('trust proxy', 1);
+
 /**
  * Middlewares
  * @requires app
@@ -34,9 +37,6 @@ if (config.get<boolean>('swagger.enabled')) {
 		swaggerUI.setup(swaggerDocs),
 	);
 }
-
-// app.ts / server.ts (TOP, before routes)
-app.set('trust proxy', 1);
 
 /**
  * Routes

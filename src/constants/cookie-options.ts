@@ -1,4 +1,3 @@
-import config from 'config';
 import type { CookieOptions } from 'express';
 
 /**
