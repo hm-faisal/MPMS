@@ -16,7 +16,7 @@ import type { CorsOptions } from 'cors';
  * @type {CorsOptions}
  */
 export const corsConfig: CorsOptions = {
-	origin: config.get<string>('cors.origin').split(','),
+	origin: config.get<string>('cors.origin'),
 	credentials: true, // Required for cookies
 	optionsSuccessStatus: 200,
 	methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
