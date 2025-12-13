@@ -14,7 +14,10 @@ const startServer = async (): Promise<void> => {
 	const port = config.get<number>('server.port');
 	const environment = config.get<string>('server.env');
 
-	await connectDb(config.get<string>('db.url'));
+	await connectDb(
+		config.get<string>('db.user'),
+		config.get<string>('db.password'),
+	);
 	httpServer.listen(port, () => {
 		logger.info(
 			`🚀 Server started successfully on port ${port} in ${environment} environment`,
