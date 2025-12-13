@@ -11,7 +11,7 @@ export const isAuthenticated = (
 	try {
 		const token = req.cookies['token'];
 		if (!token) {
-			return next(new UnauthorizedError());
+			throw new UnauthorizedError();
 		}
 
 		const payload = verifyJwtToken(token, {
@@ -19,12 +19,12 @@ export const isAuthenticated = (
 		}) as AccessTPayload;
 
 		if (!payload || !payload.userId || !payload.role) {
-			return next(new UnauthorizedError());
+			throw new UnauthorizedError();
 		}
 
 		req.user = payload;
-		return next();
+		next();
 	} catch (error) {
-		return next(error);
+		next(error);
 	}
 };
