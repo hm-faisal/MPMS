@@ -55,6 +55,7 @@
 		"jsonwebtoken": "^9.0.3",
 		"module-alias": "^2.2.3",
 		"mongoose": "^9.0.1",
+		"morgan": "^1.10.1",
 		"swagger": "^0.7.5",
 		"swagger-ui-express": "^5.0.1",
 		"winston": "^3.18.3",
