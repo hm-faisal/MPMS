@@ -11,10 +11,12 @@ import {
  */
 export const registerSchema = z.object({
 	name: validateString('Name'),
-	email: validateEmail('Email'),
+	email: validateEmail('Email').toLowerCase(),
 	password: validatePassword('Password'),
 	department: validateString('Department'),
-	skills: validateStringArray('Skills'),
+	skills: validateStringArray('Skills').transform((skills) =>
+		skills.map((skill) => skill.toLowerCase()),
+	),
 });
 
 /**

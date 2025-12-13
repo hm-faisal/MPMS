@@ -1,6 +1,7 @@
 import { BadRequestError } from '@/errors';
 import { catchAsync } from '@/utils/catch-async';
 import { sendResponse } from '@/utils/send-response';
+import { createTaskSchema } from '../tasks/schemas';
 import { updateSprintSchema } from './schemas';
 import { sprintService } from './sprints.service';
 
@@ -64,9 +65,54 @@ const deleteSprint = catchAsync(async (req, res) => {
 	});
 });
 
+/**
+ * Create task under sprint
+ * @route POST /api/v1/sprints/:id/tasks
+ * @requires { string } params.id - Sprint ID
+ * @requires { CreateTaskSchemaType } body - Task data
+ * @access Private
+ */
+const createTask = catchAsync(async (req, res) => {
+	const id = req.params['id'];
+	if (!id) {
+		throw new BadRequestError('Sprint id is required');
+	}
+	const parsedData = createTaskSchema.parse(req.body);
+	const result = await sprintService.createTask(id, parsedData);
+
+	return sendResponse(res, {
+		code: 201,
+		message: 'Task created successfully',
+		data: result,
+	});
+});
+
+/**
+ * Get tasks under sprint
+ * @route GET /api/v1/sprints/:id/tasks
+ * @requires { string } params.id - Sprint ID
+ * @access Private
+ */
+const getSprintTasks = catchAsync(async (req, res) => {
+	const id = req.params['id'];
+	if (!id) {
+		throw new BadRequestError('Sprint id is required');
+	}
+
+	const tasks = await sprintService.getSprintTasks(id);
+
+	return sendResponse(res, {
+		code: 200,
+		message: 'Sprint tasks fetched successfully',
+		data: tasks,
+	});
+});
+
 export const sprintController = {
 	getSprintsStats,
 	getSprintById,
 	updateSprintById,
 	deleteSprint,
+	createTask,
+	getSprintTasks,
 };

@@ -5,7 +5,7 @@ import { validateEmail, validatePassword } from '@/validators';
  * Login schema
  */
 export const loginSchema = z.object({
-	email: validateEmail('Email'),
+	email: validateEmail('Email').toLowerCase(),
 	password: validatePassword('Password'),
 });
 

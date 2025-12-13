@@ -3,6 +3,8 @@ import { logger } from '@/config';
 import { BadRequestError, InternalServerError, NotFoundError } from '@/errors';
 import { Project, type ProjectType } from '@/models/Project';
 import { Sprint, type SprintType } from '@/models/Sprint';
+import type { CreateTaskSchemaType } from '../tasks/schemas';
+import { createTaskAndAttachToSprint } from '../tasks/tasks.service';
 import type { UpdateSprintSchemaType } from './schemas';
 
 /**
@@ -63,7 +65,7 @@ export const createSprintAndAttachToProject = async (
  * @returns { Promise<SprintType | null> } - Sprint data
  */
 export const getSprintById = async (id: string): Promise<SprintType | null> => {
-	const sprint = await Sprint.findById(id);
+	const sprint = await Sprint.findById(id).populate('tasks');
 	if (!sprint) {
 		throw new NotFoundError('Sprint not found');
 	}
@@ -108,8 +110,48 @@ export const deleteSprintById = async (id: string): Promise<void> => {
 	await Project.findByIdAndUpdate(sprint.projectId, { $pull: { sprints: id } });
 };
 
+/**
+ * Create task under sprint
+ * @param { string } id - Sprint id
+ * @param { CreateTaskSchemaType } taskData - Task data
+ * @returns { Promise<HydratedDocument<TaskType>> } Task data
+ */
+
+export const createTask = async (
+	id: string,
+	taskData: CreateTaskSchemaType,
+) => {
+	const isExistSprint = await Sprint.findById(id);
+	if (!isExistSprint) {
+		throw new NotFoundError('Sprint not found');
+	}
+
+	const { success, task } = await createTaskAndAttachToSprint(id, taskData);
+
+	if (!success) {
+		throw new InternalServerError('Task create operation failed');
+	}
+
+	return task;
+};
+
+/** Get tasks under sprint
+ * @param { string } id - Sprint id
+ * @returns { Promise<HydratedDocument<TaskType>[]> } Task data
+ */
+export const getSprintTasks = async (id: string) => {
+	const isExistSprint = await Sprint.findById(id).populate('tasks');
+	if (!isExistSprint) {
+		throw new NotFoundError('Sprint not found');
+	}
+
+	return isExistSprint.tasks;
+};
+
 export const sprintService = {
 	getSprintById,
 	updateSprintById,
 	deleteSprintById,
+	createTask,
+	getSprintTasks,
 };

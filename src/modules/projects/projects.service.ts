@@ -50,10 +50,20 @@ export const getAllProjects = async (): Promise<ProjectType[]> => {
  * @param {string} id - Project id
  * @returns { Promise<ProjectType | null> } - Project
  */
+
 export const getProjectById = async (
 	id: string,
 ): Promise<ProjectType | null> => {
-	const project = await Project.findById(id);
+	const project = await Project.findById(id)
+		.populate({
+			path: 'sprints',
+			populate: {
+				path: 'tasks',
+				model: 'Task',
+			},
+		})
+		.lean();
+
 	return project;
 };
 
