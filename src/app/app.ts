@@ -27,7 +27,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cors(corsConfig));
 app.use(helmet(securityConfig));
-app.use(rateLimit(rateLimitConfig));
+// app.use(rateLimit(rateLimitConfig));
 app.use(morgan('combined'));
 
 /**
