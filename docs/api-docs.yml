@@ -22,9 +22,9 @@ servers:
     description: Development server api
   - url: http://localhost:8080
     description: Development server
-  - url: https://https://mpms-cv4d.onrender.com/api/v1
+  - url: https://mpms-cv4d.onrender.com/api/v1
     description: Production server api
-  - url: https://https://mpms-cv4d.onrender.com
+  - url: https://mpms-cv4d.onrender.com
     description: Production server
 
 tags:
