@@ -14,9 +14,8 @@ import type { CookieOptions } from 'express';
  */
 export const cookieOptions: CookieOptions = {
 	httpOnly: true,
-	secure: config.get('server.env') === 'production',
-	sameSite: config.get('server.env') === 'production' ? 'none' : 'lax',
-	maxAge: config.get<number>('jwt.accessTokenExpiresIn') * 1000,
-	path: '/', // Explicit path for cross-origin cookies
-	// Do NOT set 'domain' for cross-origin cookies
+	secure: true, // REQUIRED on Render
+	sameSite: 'none', // REQUIRED cross-origin
+	maxAge: 24 * 60 * 60 * 1000,
+	path: '/',
 };

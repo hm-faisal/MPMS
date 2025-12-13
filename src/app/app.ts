@@ -35,6 +35,9 @@ if (config.get<boolean>('swagger.enabled')) {
 	);
 }
 
+// app.ts / server.ts (TOP, before routes)
+app.set('trust proxy', 1);
+
 /**
  * Routes
  * @requires app
