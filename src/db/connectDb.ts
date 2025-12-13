@@ -3,6 +3,7 @@ import { logger } from '@/config';
 
 export const connectDb = async (db_url: string) => {
 	try {
+		logger.info('Connecting to database...', { db_url });
 		await connect(db_url);
 		logger.info('Database connected successfully');
 	} catch (_error) {
