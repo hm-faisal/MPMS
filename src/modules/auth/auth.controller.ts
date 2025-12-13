@@ -1,3 +1,4 @@
+import { cookieOptions } from '@/constants/cookie-options';
 import { UnauthorizedError } from '@/errors';
 import { catchAsync } from '@/utils/catch-async';
 import type { AccessTPayload } from '@/utils/jwt-helper';
@@ -61,7 +62,7 @@ const login = catchAsync(async (req, res) => {
  */
 
 const logout = catchAsync(async (_req, res) => {
-	res.clearCookie('token');
+	res.clearCookie('token', cookieOptions);
 	res.status(204).json({
 		code: 204,
 		message: 'User logged out successfully',

@@ -17,5 +17,6 @@ export const cookieOptions: CookieOptions = {
 	secure: config.get('server.env') === 'production',
 	sameSite: config.get('server.env') === 'production' ? 'none' : 'lax',
 	maxAge: config.get<number>('jwt.accessTokenExpiresIn') * 1000,
+	path: '/', // Explicit path for cross-origin cookies
 	// Do NOT set 'domain' for cross-origin cookies
 };
