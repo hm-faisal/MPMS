@@ -35,7 +35,8 @@ const MEMBERPERMISSIONS = [
  */
 
 export const hasPermission =
-	(permission: string) => (req: Request, res: Response, next: NextFunction) => {
+	(permission: string) =>
+	(req: Request, _res: Response, next: NextFunction) => {
 		if (!req.user || !req.user.userId || !req.user.role) {
 			throw new UnauthorizedError('Unauthorized');
 		}

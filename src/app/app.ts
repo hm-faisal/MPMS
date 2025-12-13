@@ -2,16 +2,10 @@ import config from 'config';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { type Application } from 'express';
-import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import swaggerUI from 'swagger-ui-express';
-import {
-	corsConfig,
-	rateLimitConfig,
-	securityConfig,
-	swaggerDocs,
-} from '@/config';
+import { corsConfig, securityConfig, swaggerDocs } from '@/config';
 import { errorHandler } from '@/errors';
 import { applicationRoutes } from '@/routes';
 
@@ -27,7 +21,6 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cors(corsConfig));
 app.use(helmet(securityConfig));
-// app.use(rateLimit(rateLimitConfig));
 app.use(morgan('combined'));
 
 /**
