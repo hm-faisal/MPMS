@@ -20,6 +20,11 @@ const sprintSchema = new Schema(
 			ref: 'Project',
 			required: true,
 		},
+		tasks: {
+			type: [Schema.ObjectId],
+			ref: 'Task',
+			required: false,
+		},
 	},
 	{ timestamps: true },
 );
