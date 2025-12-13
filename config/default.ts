@@ -10,6 +10,7 @@ export default {
 		host: process.env['HOST'],
 		port: process.env['PORT'],
 		env: process.env['NODE_ENV'],
+		url: process.env['SERVER_URL'],
 	},
 
 	/**
@@ -18,7 +19,6 @@ export default {
 	db: {
 		user: process.env['DATABASE_USER'],
 		password: process.env['DATABASE_PASSWORD'],
-		url: process.env['DATABASE_URL'],
 	},
 
 	/**

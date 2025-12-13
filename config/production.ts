@@ -10,6 +10,7 @@ export default {
 		host: process.env['HOST'],
 		port: process.env['PORT'],
 		env: process.env['NODE_ENV'],
+		url: process.env['SERVER_URL'],
 	},
 
 	/**
