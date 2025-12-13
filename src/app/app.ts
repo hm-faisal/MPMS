@@ -4,6 +4,7 @@ import cors from 'cors';
 import express, { type Application } from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
+import morgan from 'morgan';
 import swaggerUI from 'swagger-ui-express';
 import {
 	corsConfig,
@@ -27,6 +28,7 @@ app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cors(corsConfig));
 app.use(helmet(securityConfig));
 app.use(rateLimit(rateLimitConfig));
+app.use(morgan('combined'));
 
 /**
  * Swagger API docs
