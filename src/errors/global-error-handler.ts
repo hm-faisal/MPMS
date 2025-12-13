@@ -147,6 +147,9 @@ const globalErrorHandler: ErrorRequestHandler = (
 		code = 400;
 		// Don't use error.message if it contains the stringified ZodError
 		message = error.message.startsWith('[') ? 'Bad request' : error.message;
+	} else if (error.name === 'UnauthorizedError') {
+		code = 401;
+		message = error.message || 'Unauthorized';
 	} else if (isMongooseDuplicateKeyError(error)) {
 		code = 409;
 		const field = Object.keys(error.keyValue ?? {})[0];
